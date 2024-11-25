@@ -2,6 +2,7 @@ package smoke_tests
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/xml"
 	"fmt"
 	"net/http"
@@ -348,7 +349,8 @@ func TestSendMessageBatchV1_Xml_Success_including_attributes(t *testing.T) {
 	stringType := "String"
 	numberType := "Number"
 
-	binaryValue := "binary-value"
+	binaryValue := []byte("binary-value")
+	binaryValueEncodeString := base64.StdEncoding.EncodeToString([]byte("binary-value"))
 	stringValue := "string-value"
 	numberValue := "100"
 
@@ -370,7 +372,7 @@ func TestSendMessageBatchV1_Xml_Success_including_attributes(t *testing.T) {
 		WithFormField("Entries.1.MessageBody", messageBody2).
 		WithFormField("Entries.1.MessageAttributes.1.Name", binaryAttributeKey).
 		WithFormField("Entries.1.MessageAttributes.1.Value.DataType", binaryType).
-		WithFormField("Entries.1.MessageAttributes.1.Value.BinaryValue", binaryValue).
+		WithFormField("Entries.1.MessageAttributes.1.Value.BinaryValue", binaryValueEncodeString).
 		WithFormField("Entries.1.MessageAttributes.2.Name", stringAttributeKey).
 		WithFormField("Entries.1.MessageAttributes.2.Value.DataType", stringType).
 		WithFormField("Entries.1.MessageAttributes.2.Value.StringValue", stringValue).
