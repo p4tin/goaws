@@ -1,6 +1,7 @@
 package models
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/url"
@@ -201,12 +202,18 @@ func parseMessageAttributes(values url.Values, keyPrefix string) map[string]Mess
 		}
 
 		stringValue := values.Get(fmt.Sprintf("%s.%d.Value.StringValue", keyPrefix, i))
-		binaryValue := values.Get(fmt.Sprintf("%s.%d.Value.BinaryValue", keyPrefix, i))
+		encodedBinaryValue := values.Get(fmt.Sprintf("%s.%d.Value.BinaryValue", keyPrefix, i))
+
+		binaryValue, err := base64.StdEncoding.DecodeString(encodedBinaryValue)
+		if err != nil {
+			log.Warnf("Failed to base64 decode. %s may not have been base64 encoded.", encodedBinaryValue)
+			binaryValue = []byte(encodedBinaryValue)
+		}
 
 		result[name] = MessageAttribute{
 			DataType:    dataType,
 			StringValue: stringValue,
-			BinaryValue: []byte(binaryValue),
+			BinaryValue: binaryValue,
 		}
 	}
 

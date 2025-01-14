@@ -282,7 +282,7 @@ func Test_SendMessageV1_xml_with_attributes(t *testing.T) {
 		WithFormField("MessageAttribute.2.Value.StringValue", "2").
 		WithFormField("MessageAttribute.3.Name", "attr3").
 		WithFormField("MessageAttribute.3.Value.DataType", "Binary").
-		WithFormField("MessageAttribute.3.Value.BinaryValue", "attr3_value").
+		WithFormField("MessageAttribute.3.Value.BinaryValue", "YXR0cjNfdmFsdWU="). // base64 encode string attr3_value
 		Expect().
 		Status(http.StatusOK).
 		Body().Raw()
